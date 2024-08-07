@@ -1,0 +1,10 @@
+.ant-select-selector {
+
+    background-color: rgb(160, 209, 255) !important;
+}
+
+.ant-select-selection-item div:first-child {
+    gap: 10px;
+    height: 30px;
+    width: 100px !important;
+}

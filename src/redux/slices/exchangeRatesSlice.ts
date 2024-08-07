@@ -27,11 +27,7 @@ export const fetchExchangeRates:any = createAsyncThunk(
   'exchangeRates/fetchExchangeRates',
   async ({ baseCurrency, targetCurrency, amount }: FetchExchangeRatesParams, { rejectWithValue }) => {
     try {
-      const response = await api.latest({ base_currency: baseCurrency });
-      const rates = response.data;
-      const targetRate = rates[targetCurrency];
-      const targetAmount = targetRate ? (parseFloat(amount) * targetRate).toFixed(2) : '';
-      return { rates, targetAmount, baseAmount: amount };
+      return await api.fetchExchangeRates(baseCurrency, targetCurrency, amount);
     } catch (error) {
       return rejectWithValue('Error fetching exchange rates');
     }
@@ -43,9 +39,9 @@ const exchangeRatesSlice = createSlice({
   initialState,
   reducers: {
     setTargetAmount(state, action) {
-      const { targetAmount, baseCurrency, targetCurrency } = action.payload;
+      const { targetAmount, targetCurrency } = action.payload;
       const targetRate = state.rates[targetCurrency];
-      const baseAmount = targetRate ? (parseFloat(targetAmount) / targetRate).toFixed(2) : '';
+      const baseAmount = api.calculateBaseAmount(targetAmount, targetRate);
       state.targetAmount = targetAmount;
       state.baseAmount = baseAmount;
     },
@@ -53,7 +49,7 @@ const exchangeRatesSlice = createSlice({
       const { baseAmount, baseCurrency, targetCurrency } = action.payload;
       const baseRate = state.rates[baseCurrency];
       const targetRate = state.rates[targetCurrency];
-      const targetAmount = baseRate && targetRate ? (parseFloat(baseAmount) * (targetRate / baseRate)).toFixed(2) : '';
+      const targetAmount = api.calculateBaseAmountFromRates(baseAmount, baseRate, targetRate);
       state.baseAmount = baseAmount;
       state.targetAmount = targetAmount;
     },

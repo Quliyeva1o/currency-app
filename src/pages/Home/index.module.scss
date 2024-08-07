@@ -1,20 +1,86 @@
 .div {
-    padding: 20px;
-    width: 400px;
-    margin: 20px auto;
-    div {
+    padding: 0 20px;
+    max-width: 700px;
+    gap: 20px;
+    display: flex;
+   
+    @media (max-width: 750px) {
+        gap: 0;
+        flex-direction: column;
+    }
+    p {
+        font-size: 14px;
+        color: #454745;
+        line-height: 20px;
+        transition: color 0.15s ease-in-out;
+        margin-bottom: 10px;
+    }
+    .inp {
+        background-color: #fff;
+        border-radius: 10px;
+        border: 2px solid #626262;
+        display: flex;
+        overflow: hidden;
+        width: 100%;
+        margin-bottom: 20px;
+        input {
+            border: none;
+        }
+    }
+    > div {
         width: 100% !important;
     }
 
-    input {
-        background-color: rgb(160, 209, 255);
-        width: 100%;
-    }
     table {
         margin: 0 auto;
         border: 2px outset rgb(160, 209, 255);
-        td,th {
+        td,
+        th {
             border: 1px outset rgb(160, 209, 255);
         }
     }
+}
+
+.table {
+    max-width: 700px;
+    margin: 0 auto;
+    @media (max-width: 750px) {
+        max-width: 300px;
+    }
+}
+
+.hero {
+    background-color: #fff;
+    padding: 30px 20px;
+    border-radius: 30px;
+    max-width: 700px;
+    margin: 0 auto;
+
+    @media (max-width: 750px) {
+        max-width: 300px;
+    }
+    .text {
+        font-size: 20px;
+        font-weight: 500;
+        padding: 0 20px;
+
+        span {
+            font-weight: 600;
+            color: rgb(82, 122, 0);
+        }
+    }
+}
+
+.main {
+    background-color: #163300;
+    padding: 40px;
+    @media (max-width: 750px) {
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        color:#9FE870;
+     }
 }

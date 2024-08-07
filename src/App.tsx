@@ -5,6 +5,7 @@ import "./App.css";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import '../node_modules/currency-flags/dist/currency-flags.css'
+
 const App = () => (
   <Provider store={store}>
     <Router>

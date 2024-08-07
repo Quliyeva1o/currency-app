@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../API/freeCurrencyApi'; 
+import api from '../../API/freeCurrencyApi';
 
 interface ExchangeRatesState {
   rates: { [key: string]: number };
   targetAmount: string;
+  baseAmount: string;
   loading: boolean;
   error: string | null;
 }
@@ -11,6 +12,7 @@ interface ExchangeRatesState {
 const initialState: ExchangeRatesState = {
   rates: {},
   targetAmount: '',
+  baseAmount: '1',
   loading: false,
   error: null,
 };
@@ -29,7 +31,7 @@ export const fetchExchangeRates:any = createAsyncThunk(
       const rates = response.data;
       const targetRate = rates[targetCurrency];
       const targetAmount = targetRate ? (parseFloat(amount) * targetRate).toFixed(2) : '';
-      return { rates, targetAmount };
+      return { rates, targetAmount, baseAmount: amount };
     } catch (error) {
       throw new Error('Error fetching exchange rates');
     }
@@ -39,7 +41,23 @@ export const fetchExchangeRates:any = createAsyncThunk(
 const exchangeRatesSlice = createSlice({
   name: 'exchangeRates',
   initialState,
-  reducers: {},
+  reducers: {
+    setTargetAmount(state, action) {
+      const { targetAmount, baseCurrency, targetCurrency } = action.payload;
+      const targetRate = state.rates[targetCurrency];
+      const baseAmount = targetRate ? (parseFloat(targetAmount) / targetRate).toFixed(2) : '';
+      state.targetAmount = targetAmount;
+      state.baseAmount = baseAmount;
+    },
+    setBaseAmount(state, action) {
+      const { baseAmount, baseCurrency, targetCurrency } = action.payload;
+      const baseRate = state.rates[baseCurrency];
+      const targetRate = state.rates[targetCurrency];
+      const targetAmount = baseRate && targetRate ? (parseFloat(baseAmount) * (targetRate / baseRate)).toFixed(2) : '';
+      state.baseAmount = baseAmount;
+      state.targetAmount = targetAmount;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchExchangeRates.pending, (state) => {
@@ -49,6 +67,7 @@ const exchangeRatesSlice = createSlice({
       .addCase(fetchExchangeRates.fulfilled, (state, action) => {
         state.rates = action.payload.rates;
         state.targetAmount = action.payload.targetAmount;
+        state.baseAmount = action.payload.baseAmount;
         state.loading = false;
       })
       .addCase(fetchExchangeRates.rejected, (state, action) => {
@@ -58,4 +77,5 @@ const exchangeRatesSlice = createSlice({
   },
 });
 
+export const { setTargetAmount, setBaseAmount } = exchangeRatesSlice.actions;
 export default exchangeRatesSlice.reducer;

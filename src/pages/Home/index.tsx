@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
-import { Input, Select, Table, Spin } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchExchangeRates } from '../../redux/slices/exchangeRatesSlice';
-import { RootState } from '../../redux/store';
+import React, { useEffect } from "react";
+import { Input, Select, Table, Spin } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchExchangeRates, setTargetAmount, setBaseAmount } from "../../redux/slices/exchangeRatesSlice";
+import { RootState } from "../../redux/store";
+
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
-  const { rates, targetAmount, loading } = useSelector((state: RootState) => state.exchangeRates);
-  const [amount, setAmount] = React.useState<string>("1");
+  const { rates, baseAmount, targetAmount, loading } = useSelector(
+    (state: RootState) => state.exchangeRates
+  );
+  const [amount, setAmount] = React.useState<string>(baseAmount);
   const [baseCurrency, setBaseCurrency] = React.useState<string>("USD");
   const [targetCurrency, setTargetCurrency] = React.useState<string>("EUR");
 
@@ -15,17 +18,28 @@ const Home: React.FC = () => {
     dispatch(fetchExchangeRates({ baseCurrency, targetCurrency, amount }));
   }, [amount, baseCurrency, targetCurrency, dispatch]);
 
+  const handleBaseAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newAmount = e.target.value;
+    setAmount(newAmount);
+    dispatch(setBaseAmount({ baseAmount: newAmount, baseCurrency, targetCurrency }));
+  };
+
+  const handleTargetAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTargetAmount = e.target.value;
+    dispatch(setTargetAmount({ targetAmount: newTargetAmount, baseCurrency, targetCurrency }));
+  };
+
   const columns = [
     {
-      title: 'Currency',
-      dataIndex: 'currency',
-      key: 'currency',
+      title: "Currency",
+      dataIndex: "currency",
+      key: "currency",
       sorter: (a: any, b: any) => a.currency.localeCompare(b.currency),
     },
     {
-      title: 'Rate',
-      dataIndex: 'rate',
-      key: 'rate',
+      title: "Rate",
+      dataIndex: "rate",
+      key: "rate",
       sorter: (a: any, b: any) => a.rate - b.rate,
       render: (text: number) => text.toFixed(4),
     },
@@ -53,8 +67,8 @@ const Home: React.FC = () => {
       <Input
         placeholder="Base Amount"
         type="number"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
+        value={baseAmount}
+        onChange={handleBaseAmountChange}
         style={{ marginBottom: 20 }}
       />
       <Select
@@ -71,8 +85,8 @@ const Home: React.FC = () => {
       <Input
         placeholder="Target Amount"
         type="number"
-        disabled
         value={targetAmount}
+        onChange={handleTargetAmountChange}
         style={{ marginBottom: 20 }}
       />
       {loading ? (

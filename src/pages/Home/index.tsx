@@ -11,21 +11,23 @@ import { debounce } from "lodash";
 import styles from "./index.module.scss";
 
 const Home: React.FC = () => {
+  // Hooks
   const dispatch = useDispatch();
+
+  // Store
   const { rates, baseAmount, targetAmount, loading } = useSelector(
     (state: RootState) => state.exchangeRates
   );
+
+  // State
   const [amount, setAmount] = React.useState<string>(baseAmount);
   const [baseCurrency, setBaseCurrency] = React.useState<string>("USD");
   const [targetCurrency, setTargetCurrency] = React.useState<string>("EUR");
 
+  // Request
   const fetchRates = debounce(() => {
     dispatch(fetchExchangeRates({ baseCurrency, targetCurrency, amount }));
   }, 500);
-
-  useEffect(() => {
-    fetchRates();
-  }, [baseCurrency, targetCurrency, dispatch]);
 
   const handleBaseAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAmount = e.target.value;
@@ -46,22 +48,12 @@ const Home: React.FC = () => {
     );
   };
 
-  const columns = [
-    {
-      title: "Currency",
-      dataIndex: "currency",
-      key: "currency",
-      sorter: (a: any, b: any) => a.currency.localeCompare(b.currency),
-    },
-    {
-      title: "Rate",
-      dataIndex: "rate",
-      key: "rate",
-      sorter: (a: any, b: any) => a.rate - b.rate,
-      render: (text: number) => text.toFixed(4),
-    },
-  ];
+  // Effects
+  useEffect(() => {
+    fetchRates();
+  }, [baseCurrency, targetCurrency, dispatch]);
 
+  // Table Data
   const tableData = Object.keys(rates).map((currency) => ({
     key: currency,
     currency,
@@ -155,3 +147,51 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+const columns = [
+  {
+    title: "Currency",
+    dataIndex: "currency",
+    key: "currency",
+    sorter: (a: any, b: any) => a.currency.localeCompare(b.currency),
+  },
+  {
+    title: "Rate",
+    dataIndex: "rate",
+    key: "rate",
+    sorter: (a: any, b: any) => a.rate - b.rate,
+    render: (text: number) => text.toFixed(4),
+  },
+];
+
+// const InputsAndSelects = () => {
+//   return (
+//     <div className={styles.inp}>
+//               <Input
+//                 placeholder="Target Amount"
+//                 type="number"
+//                 value={targetAmount}
+//                 onChange={handleTargetAmountChange}
+//                 style={{ height: 70 }}
+//               />
+//               <Select
+//                 value={targetCurrency}
+//                 onChange={(value) => setTargetCurrency(value)}
+//                 style={{ height: 70 }}
+//               >
+//                 {tableData.map((x) => (
+//                   <Select.Option key={x.key} value={x.key}>
+//                     <div style={{ display: "flex" }}>
+//                       <div
+//                         className={`currency-flag currency-flag-${x.key.toLowerCase()}`}
+//                       ></div>
+//                       <div> {x.key}</div>
+//                     </div>
+//                   </Select.Option>
+//                 ))}
+//               </Select>
+//             </div>
+//   )
+// };
+
+// const options

@@ -1,10 +1,14 @@
 import React, { useEffect } from "react";
 import { Input, Select, Table, Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchExchangeRates, setTargetAmount, setBaseAmount } from "../../redux/slices/exchangeRatesSlice";
+import {
+  fetchExchangeRates,
+  setTargetAmount,
+  setBaseAmount,
+} from "../../redux/slices/exchangeRatesSlice";
 import { RootState } from "../../redux/store";
 import { debounce } from "lodash";
-
+import styles from "./index.module.scss";
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
@@ -16,22 +20,30 @@ const Home: React.FC = () => {
   const [targetCurrency, setTargetCurrency] = React.useState<string>("EUR");
 
   const fetchRates = debounce(() => {
-   dispatch(fetchExchangeRates({ baseCurrency, targetCurrency, amount }));
+    dispatch(fetchExchangeRates({ baseCurrency, targetCurrency, amount }));
   }, 500);
 
   useEffect(() => {
-    fetchRates()
+    fetchRates();
   }, [baseCurrency, targetCurrency, dispatch]);
 
   const handleBaseAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAmount = e.target.value;
     setAmount(newAmount);
-    dispatch(setBaseAmount({ baseAmount: newAmount, baseCurrency, targetCurrency }));
+    dispatch(
+      setBaseAmount({ baseAmount: newAmount, baseCurrency, targetCurrency })
+    );
   };
 
   const handleTargetAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTargetAmount = e.target.value;
-    dispatch(setTargetAmount({ targetAmount: newTargetAmount, baseCurrency, targetCurrency }));
+    dispatch(
+      setTargetAmount({
+        targetAmount: newTargetAmount,
+        baseCurrency,
+        targetCurrency,
+      })
+    );
   };
 
   const columns = [
@@ -57,33 +69,44 @@ const Home: React.FC = () => {
   }));
 
   return (
-    <div style={{ padding: 20 }}>
+    <div className={styles.div}>
       <Select
         value={baseCurrency}
         onChange={(value) => setBaseCurrency(value)}
-        style={{ width: 200, marginBottom: 20 }}
+        style={{ height: 50, marginBottom: 20 }}
       >
         {tableData.map((x) => (
           <Select.Option key={x.key} value={x.key}>
-            {x.key}
+            <div style={{ display: "flex" }}>
+              <div
+                className={`currency-flag currency-flag-${x.key.toLowerCase()}`}
+              ></div>
+              <div> {x.key}</div>
+            </div>
           </Select.Option>
         ))}
       </Select>
+
       <Input
         placeholder="Base Amount"
         type="number"
         value={baseAmount}
         onChange={handleBaseAmountChange}
-        style={{ marginBottom: 20 }}
+        style={{ marginBottom: 20, height: 50 }}
       />
       <Select
         value={targetCurrency}
         onChange={(value) => setTargetCurrency(value)}
-        style={{ width: 200, marginBottom: 20 }}
+        style={{ height: 50, marginBottom: 20 }}
       >
-        {tableData.map((x) => (
+         {tableData.map((x) => (
           <Select.Option key={x.key} value={x.key}>
-            {x.key}
+            <div style={{ display: "flex" }}>
+              <div
+                className={`currency-flag currency-flag-${x.key.toLowerCase()}`}
+              ></div>
+              <div> {x.key}</div>
+            </div>
           </Select.Option>
         ))}
       </Select>
@@ -92,7 +115,7 @@ const Home: React.FC = () => {
         type="number"
         value={targetAmount}
         onChange={handleTargetAmountChange}
-        style={{ marginBottom: 20 }}
+        style={{ marginBottom: 20, height: 50 }}
       />
       {loading ? (
         <Spin size="large" />

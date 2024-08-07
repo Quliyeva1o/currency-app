@@ -69,64 +69,87 @@ const Home: React.FC = () => {
   }));
 
   return (
-    <div className={styles.div}>
-      <Select
-        value={baseCurrency}
-        onChange={(value) => setBaseCurrency(value)}
-        style={{ height: 50, marginBottom: 20 }}
-      >
-        {tableData.map((x) => (
-          <Select.Option key={x.key} value={x.key}>
-            <div style={{ display: "flex" }}>
-              <div
-                className={`currency-flag currency-flag-${x.key.toLowerCase()}`}
-              ></div>
-              <div> {x.key}</div>
-            </div>
-          </Select.Option>
-        ))}
-      </Select>
+    <div className={styles.main}>
+      <h1>Currency Converter App</h1>
 
-      <Input
-        placeholder="Base Amount"
-        type="number"
-        value={baseAmount}
-        onChange={handleBaseAmountChange}
-        style={{ marginBottom: 20, height: 50 }}
-      />
-      <Select
-        value={targetCurrency}
-        onChange={(value) => setTargetCurrency(value)}
-        style={{ height: 50, marginBottom: 20 }}
-      >
-         {tableData.map((x) => (
-          <Select.Option key={x.key} value={x.key}>
-            <div style={{ display: "flex" }}>
-              <div
-                className={`currency-flag currency-flag-${x.key.toLowerCase()}`}
-              ></div>
-              <div> {x.key}</div>
+      <div className={styles.hero}>
+        <div className={styles.div}>
+          <div>
+            <p>Amount</p>
+            <div className={styles.inp}>
+              <Input
+                placeholder="Base Amount"
+                type="number"
+                value={baseAmount}
+                onChange={handleBaseAmountChange}
+                style={{ height: 70 }}
+              />
+              <Select
+                value={baseCurrency}
+                onChange={(value) => setBaseCurrency(value)}
+                style={{ height: 70 }}
+              >
+                {tableData.map((x) => (
+                  <Select.Option key={x.key} value={x.key}>
+                    <div style={{ display: "flex" }}>
+                      <div
+                        className={`currency-flag currency-flag-${x.key.toLowerCase()}`}
+                      ></div>
+                      <div> {x.key}</div>
+                    </div>
+                  </Select.Option>
+                ))}
+              </Select>
             </div>
-          </Select.Option>
-        ))}
-      </Select>
-      <Input
-        placeholder="Target Amount"
-        type="number"
-        value={targetAmount}
-        onChange={handleTargetAmountChange}
-        style={{ marginBottom: 20, height: 50 }}
-      />
-      {loading ? (
-        <Spin size="large" />
-      ) : (
-        <Table
-          columns={columns}
-          dataSource={tableData}
-          pagination={false}
-          style={{ marginTop: 20 }}
-        />
-      )}
+          </div>
+          <div>
+            <p>Converted to</p>
+
+            <div className={styles.inp}>
+              <Input
+                placeholder="Target Amount"
+                type="number"
+                value={targetAmount}
+                onChange={handleTargetAmountChange}
+                style={{ height: 70 }}
+              />
+              <Select
+                value={targetCurrency}
+                onChange={(value) => setTargetCurrency(value)}
+                style={{ height: 70 }}
+              >
+                {tableData.map((x) => (
+                  <Select.Option key={x.key} value={x.key}>
+                    <div style={{ display: "flex" }}>
+                      <div
+                        className={`currency-flag currency-flag-${x.key.toLowerCase()}`}
+                      ></div>
+                      <div> {x.key}</div>
+                    </div>
+                  </Select.Option>
+                ))}
+              </Select>
+            </div>
+          </div>
+        </div>
+        <p className={styles.text}>
+          {baseAmount} {baseCurrency} = <span>{targetAmount} </span>
+          {targetCurrency}
+        </p>
+      </div>
+
+      <div className={styles.table}>
+        {loading ? (
+          <Spin size="large" />
+        ) : (
+          <Table
+            columns={columns}
+            dataSource={tableData}
+            pagination={false}
+            style={{ marginTop: 20 }}
+          />
+        )}
+      </div>
     </div>
   );
 };

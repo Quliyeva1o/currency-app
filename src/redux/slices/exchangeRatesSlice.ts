@@ -25,7 +25,7 @@ interface FetchExchangeRatesParams {
 
 export const fetchExchangeRates:any = createAsyncThunk(
   'exchangeRates/fetchExchangeRates',
-  async ({ baseCurrency, targetCurrency, amount }: FetchExchangeRatesParams) => {
+  async ({ baseCurrency, targetCurrency, amount }: FetchExchangeRatesParams, { rejectWithValue }) => {
     try {
       const response = await api.latest({ base_currency: baseCurrency });
       const rates = response.data;
@@ -33,7 +33,7 @@ export const fetchExchangeRates:any = createAsyncThunk(
       const targetAmount = targetRate ? (parseFloat(amount) * targetRate).toFixed(2) : '';
       return { rates, targetAmount, baseAmount: amount };
     } catch (error) {
-      throw new Error('Error fetching exchange rates');
+      return rejectWithValue('Error fetching exchange rates');
     }
   }
 );
@@ -72,7 +72,7 @@ const exchangeRatesSlice = createSlice({
       })
       .addCase(fetchExchangeRates.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Something went wrong';
+        state.error = action.payload as string || 'Something went wrong';
       });
   },
 });

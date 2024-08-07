@@ -1,0 +1,20 @@
+.div {
+    padding: 20px;
+    width: 400px;
+    margin: 20px auto;
+    div {
+        width: 100% !important;
+    }
+
+    input {
+        background-color: rgb(160, 209, 255);
+        width: 100%;
+    }
+    table {
+        margin: 0 auto;
+        border: 2px outset rgb(160, 209, 255);
+        td,th {
+            border: 1px outset rgb(160, 209, 255);
+        }
+    }
+}

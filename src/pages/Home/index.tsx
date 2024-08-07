@@ -3,6 +3,7 @@ import { Input, Select, Table, Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchExchangeRates, setTargetAmount, setBaseAmount } from "../../redux/slices/exchangeRatesSlice";
 import { RootState } from "../../redux/store";
+import { debounce } from "lodash";
 
 
 const Home: React.FC = () => {
@@ -14,9 +15,13 @@ const Home: React.FC = () => {
   const [baseCurrency, setBaseCurrency] = React.useState<string>("USD");
   const [targetCurrency, setTargetCurrency] = React.useState<string>("EUR");
 
+  const fetchRates = debounce(() => {
+   dispatch(fetchExchangeRates({ baseCurrency, targetCurrency, amount }));
+  }, 500);
+
   useEffect(() => {
-    dispatch(fetchExchangeRates({ baseCurrency, targetCurrency, amount }));
-  }, [amount, baseCurrency, targetCurrency, dispatch]);
+    fetchRates()
+  }, [baseCurrency, targetCurrency, dispatch]);
 
   const handleBaseAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAmount = e.target.value;

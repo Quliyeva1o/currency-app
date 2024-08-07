@@ -8,10 +8,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   </React.StrictMode>,
 )
 
-
+ 
 // 1-Api folderinde sendRequest tipli function yaz
 // 2-Storedan fetch cixsin
-// 3-Classname ver (.table deyis)
-// 4-Footer duzelt
+// 3-Classname ver (.table deyis).
+// 4-Footer duzelt.
 // 5-Optionslari ve Input selectleri maple
 // 6-Commentlerle isle CSS/TS

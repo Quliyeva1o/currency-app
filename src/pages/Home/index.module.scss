@@ -3,49 +3,25 @@
     max-width: 700px;
     gap: 20px;
     display: flex;
-   
-    @media (max-width: 750px) {
-        gap: 0;
-        flex-direction: column;
-    }
+
     p {
-        font-size: 14px;
+        font-size: 16px;
         color: #454745;
         line-height: 20px;
-        transition: color 0.15s ease-in-out;
         margin-bottom: 10px;
     }
-    .inp {
-        background-color: #fff;
-        border-radius: 10px;
-        border: 2px solid #626262;
-        display: flex;
-        overflow: hidden;
-        width: 100%;
-        margin-bottom: 20px;
-        input {
-            border: none;
-        }
-    }
+
     > div {
         width: 100% !important;
     }
-
-    table {
-        margin: 0 auto;
-        border: 2px outset rgb(160, 209, 255);
-        td,
-        th {
-            border: 1px outset rgb(160, 209, 255);
-        }
-    }
 }
 
-.table {
+.myTable {
     max-width: 700px;
     margin: 0 auto;
-    @media (max-width: 750px) {
-        max-width: 300px;
+    td,
+    th {
+        border: 1px outset #9fe870;
     }
 }
 
@@ -56,9 +32,6 @@
     max-width: 700px;
     margin: 0 auto;
 
-    @media (max-width: 750px) {
-        max-width: 300px;
-    }
     .text {
         font-size: 20px;
         font-weight: 500;
@@ -74,16 +47,31 @@
 .main {
     background-color: #163300;
     padding: 40px;
-    @media (max-width: 750px) {
-        padding: 20px;
-    }
     h1 {
         text-align: center;
         justify-content: center;
         margin-bottom: 20px;
-        color:#9FE870;
-     }
+        color: #9fe870;
+    }
 }
 
-
 // ===================== RESPONSIVE =====================
+
+@media (max-width: 750px) {
+    .div {
+        gap: 0;
+        flex-direction: column;
+    }
+
+    .myTable {
+        max-width: 300px;
+    }
+
+    .hero {
+        max-width: 300px;
+    }
+
+    .main {
+        padding: 20px;
+    }
+}

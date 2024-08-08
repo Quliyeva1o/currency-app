@@ -85,9 +85,9 @@ const Home: React.FC = () => {
       <h1>Currency Converter App</h1>
 
       <div className={styles.hero}>
-        <div className={styles.div}>
-          <div>
-            <p>Amount</p>
+        <div className={styles.currency_hero_div}>
+          <div className={styles.currency_input_select}>
+            <p className={styles.input_heading}>Amount</p>
             <CurrencyInputSelectPair
               amount={baseAmount}
               currency={baseCurrency}
@@ -97,8 +97,8 @@ const Home: React.FC = () => {
               placeholder="Base Amount"
             />
           </div>
-          <div>
-            <p>Converted to</p>
+          <div className={styles.currency_input_select}>
+            <p className={styles.input_heading}>Converted to</p>
             <CurrencyInputSelectPair
               amount={targetAmount}
               currency={targetCurrency}
@@ -115,7 +115,7 @@ const Home: React.FC = () => {
         </p>
       </div>
 
-      <div className={styles.myTable}>
+      <div className={styles.currency_table}>
         {loading ? (
           <Spin size="large" />
         ) : (

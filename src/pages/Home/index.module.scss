@@ -1,24 +1,25 @@
-.div {
+.currency_hero_div {
     padding: 0 20px;
     max-width: 700px;
     gap: 20px;
     display: flex;
 
-    p {
+    .input_heading {
         font-size: 16px;
         color: #454745;
         line-height: 20px;
         margin-bottom: 10px;
     }
 
-    > div {
+    .currency_input_select {
         width: 100% !important;
     }
 }
 
-.myTable {
+.currency_table {
     max-width: 700px;
     margin: 0 auto;
+    margin-bottom: 70px;
     td,
     th {
         border: 1px outset #9fe870;
@@ -47,6 +48,7 @@
 .main {
     background-color: #163300;
     padding: 40px;
+    min-height: 90vh;
     h1 {
         text-align: center;
         justify-content: center;
@@ -58,12 +60,12 @@
 // ===================== RESPONSIVE =====================
 
 @media (max-width: 750px) {
-    .div {
+    .currency_hero_div  {
         gap: 0;
         flex-direction: column;
     }
 
-    .myTable {
+    .currency_table {
         max-width: 300px;
     }
 

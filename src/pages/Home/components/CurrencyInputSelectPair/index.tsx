@@ -1,7 +1,8 @@
 import React from "react";
 import { Input, Select } from "antd";
-import styles from "./index.module.scss";
 
+import styles from "./index.module.scss";
+//interfaces
 interface CurrencyInputSelectPairProps {
   amount: string;
   currency: string;
@@ -19,7 +20,7 @@ const CurrencyInputSelectPair: React.FC<CurrencyInputSelectPairProps> = ({
   options,
   placeholder,
 }) => (
-  <div className={styles.inp}>
+  <div className={styles.currency_inputs}>
     <Input
       placeholder={placeholder}
       type="number"

@@ -11,6 +11,11 @@
     border: none !important;
 }
 
+body{
+    background-color: #163300;
+        height: 100%;
+        position: relative;
+}
 .currency-flag{
     border-radius: 50%;
     height: 30px!important;

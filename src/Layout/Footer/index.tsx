@@ -6,6 +6,7 @@ import {
   MailOutlined,
 } from "@ant-design/icons";
 
+//footer!!
 
 const Footer = () => {
   return (
@@ -40,7 +41,7 @@ const Footer = () => {
 
 export default Footer;
 
-
+//social links!
 const socialLinks = [
   {
     href: "mailto:renaquliyevva@gmail.com",

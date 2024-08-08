@@ -33,16 +33,29 @@ const Home: React.FC = () => {
     [baseCurrency, targetCurrency, amount, dispatch]
   );
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'base' | 'target') => {
+  // Functions
+  const handleAmountChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: "base" | "target"
+  ) => {
     const newValue = e.target.value;
-    if (type === 'base') {
+    if (type === "base") {
       setAmount(newValue);
-      dispatch(setBaseAmount({ baseAmount: newValue, baseCurrency, targetCurrency }));
+      dispatch(
+        setBaseAmount({ baseAmount: newValue, baseCurrency, targetCurrency })
+      );
     } else {
-      dispatch(setTargetAmount({ targetAmount: newValue, baseCurrency, targetCurrency }));
+      dispatch(
+        setTargetAmount({
+          targetAmount: newValue,
+          baseCurrency,
+          targetCurrency,
+        })
+      );
     }
   };
 
+  // Effects
   useEffect(() => {
     fetchRates();
   }, [baseCurrency, targetCurrency, amount, fetchRates]);
@@ -58,7 +71,9 @@ const Home: React.FC = () => {
   const options = tableData.map((x) => ({
     label: (
       <div style={{ display: "flex" }}>
-        <div className={`currency-flag currency-flag-${x.key.toLowerCase()}`}></div>
+        <div
+          className={`currency-flag currency-flag-${x.key.toLowerCase()}`}
+        ></div>
         <div> {x.key}</div>
       </div>
     ),
@@ -76,7 +91,7 @@ const Home: React.FC = () => {
             <CurrencyInputSelectPair
               amount={baseAmount}
               currency={baseCurrency}
-              onAmountChange={(e) => handleAmountChange(e, 'base')}
+              onAmountChange={(e) => handleAmountChange(e, "base")}
               onCurrencyChange={setBaseCurrency}
               options={options}
               placeholder="Base Amount"
@@ -87,7 +102,7 @@ const Home: React.FC = () => {
             <CurrencyInputSelectPair
               amount={targetAmount}
               currency={targetCurrency}
-              onAmountChange={(e) => handleAmountChange(e, 'target')}
+              onAmountChange={(e) => handleAmountChange(e, "target")}
               onCurrencyChange={setTargetCurrency}
               options={options}
               placeholder="Target Amount"

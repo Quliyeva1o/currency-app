@@ -24,7 +24,7 @@ const Home: React.FC = () => {
   const [baseCurrency, setBaseCurrency] = useState<string>("USD");
   const [targetCurrency, setTargetCurrency] = useState<string>("EUR");
 
-  //FETCH
+  // FETCH
   const fetchRates = useCallback(
     debounce(async () => {
       dispatch(setLoading(true));
@@ -37,20 +37,22 @@ const Home: React.FC = () => {
         dispatch(setExchangeRates(response));
       } catch (error) {
         dispatch(setError("Error fetching exchange rates"));
+      } finally {
+        dispatch(setLoading(false));
       }
     }, 500),
     [baseCurrency, targetCurrency, dispatch]
   );
 
-  //EFFECTS
+  // EFFECTS
   useEffect(() => {
     fetchRates();
   }, [baseCurrency, targetCurrency, amount, fetchRates]);
 
   const handleAmountChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    type: "base" | "target") => {
-      
+    type: "base" | "target"
+  ) => {
     const newValue = e.target.value;
     if (type === "base") {
       setAmount(newValue);
@@ -68,14 +70,14 @@ const Home: React.FC = () => {
     }
   };
 
-  //TABLE DATA
+  // TABLE DATA
   const tableData = Object.keys(rates).map((currency) => ({
     key: currency,
     currency,
     rate: rates[currency],
   }));
 
-  //OPTIONS
+  // OPTIONS
   const options = tableData.map((x) => ({
     label: (
       <div style={{ display: "flex" }}>

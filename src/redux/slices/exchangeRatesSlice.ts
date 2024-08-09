@@ -1,77 +1,72 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../API/freeCurrencyApi';
+  import { createSlice } from '@reduxjs/toolkit';
 
-interface ExchangeRatesState {
-  rates: { [key: string]: number };
-  targetAmount: string;
-  baseAmount: string;
-  loading: boolean;
-  error: string | null;
-}
-
-const initialState: ExchangeRatesState = {
-  rates: {},
-  targetAmount: '',
-  baseAmount: '1',
-  loading: false,
-  error: null,
-};
-
-interface FetchExchangeRatesParams {
-  baseCurrency: string;
-  targetCurrency: string;
-  amount: string;
-}
-
-export const fetchExchangeRates:any = createAsyncThunk(
-  'exchangeRates/fetchExchangeRates',
-  async ({ baseCurrency, targetCurrency, amount }: FetchExchangeRatesParams, { rejectWithValue }) => {
-    try {
-      return await api.fetchExchangeRates(baseCurrency, targetCurrency, amount);
-    } catch (error) {
-      return rejectWithValue('Error fetching exchange rates');
-    }
+  interface ExchangeRatesState {
+    rates: { [key: string]: number };
+    targetAmount: string;
+    baseAmount: string;
+    loading: boolean;
+    error: string | null;
   }
-);
 
-const exchangeRatesSlice = createSlice({
-  name: 'exchangeRates',
-  initialState,
-  reducers: {
-    setTargetAmount(state, action) {
-      const { targetAmount, targetCurrency } = action.payload;
-      const targetRate = state.rates[targetCurrency];
-      const baseAmount = api.calculateBaseAmount(targetAmount, targetRate);
-      state.targetAmount = targetAmount;
-      state.baseAmount = baseAmount;
-    },
-    setBaseAmount(state, action) {
-      const { baseAmount, baseCurrency, targetCurrency } = action.payload;
-      const baseRate = state.rates[baseCurrency];
-      const targetRate = state.rates[targetCurrency];
-      const targetAmount = api.calculateBaseAmountFromRates(baseAmount, baseRate, targetRate);
-      state.baseAmount = baseAmount;
-      state.targetAmount = targetAmount;
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchExchangeRates.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchExchangeRates.fulfilled, (state, action) => {
+  const initialState: ExchangeRatesState = {
+    rates: {},
+    targetAmount: '0.92',
+    baseAmount: '1',
+    loading: false,
+    error: null,
+  };
+
+  interface SetAmountPayload {
+    targetAmount?: string;
+    baseAmount?: string;
+    baseCurrency?: string;
+    targetCurrency?: string;
+  }
+
+  const exchangeRatesSlice = createSlice({
+    name: 'exchangeRates',
+    initialState,
+    reducers: {
+      setTargetAmount(state, action) {
+        const { targetAmount, targetCurrency } = action.payload as SetAmountPayload;
+        const targetRate = state.rates[targetCurrency || ''];
+        if (targetRate) {
+          const baseAmount = (parseFloat(targetAmount || '0') / targetRate).toFixed(2);
+          state.targetAmount = targetAmount || '';
+          state.baseAmount = baseAmount;
+        }
+      },
+      setBaseAmount(state, action) {
+        const { baseAmount, baseCurrency, targetCurrency } = action.payload as SetAmountPayload;
+        const baseRate = state.rates[baseCurrency || ''];
+        const targetRate = state.rates[targetCurrency || ''];
+        if (baseRate && targetRate) {
+          const targetAmount = (parseFloat(baseAmount || '0') * (targetRate / baseRate)).toFixed(2);
+          state.baseAmount = baseAmount || '';
+          state.targetAmount = targetAmount;
+        }
+      },
+      setExchangeRates(state, action) {
         state.rates = action.payload.rates;
-        state.targetAmount = action.payload.targetAmount;
-        state.baseAmount = action.payload.baseAmount;
         state.loading = false;
-      })
-      .addCase(fetchExchangeRates.rejected, (state, action) => {
+        state.error = null;
+      },
+      setLoading(state, action) {
+        state.loading = action.payload;
+      },
+      setError(state, action) {
+        state.error = action.payload;
         state.loading = false;
-        state.error = action.payload as string || 'Something went wrong';
-      });
-  },
-});
+      },
+    },
+  });
 
-export const { setTargetAmount, setBaseAmount } = exchangeRatesSlice.actions;
-export default exchangeRatesSlice.reducer;
+  export const {
+    setTargetAmount,
+    setBaseAmount,
+    setExchangeRates,
+    setLoading,
+    setError
+  } = exchangeRatesSlice.actions;
+
+  export default exchangeRatesSlice.reducer;
